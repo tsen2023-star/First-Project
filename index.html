@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Practice Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Coding Playground</h1>
+        <p>Select a language to start practicing your skills:</p>
+
+        <div class="language-options">
+            <button onclick="selectLanguage('python')">Python</button>
+            <button onclick="selectLanguage('java')">Java</button>
+            <button onclick="selectLanguage('javascript')">JavaScript</button>
+            <button onclick="selectLanguage('c')">C Language</button>
+            <button onclick="selectLanguage('html')">HTML</button>
+            <button onclick="selectLanguage('css')">CSS</button>
+        </div>
+    </div>
+
+    <script>
+        function selectLanguage(lang) {
+            // Save the selection so editor.html knows what to load
+            localStorage.setItem('selectedLanguage', lang);
+            // Navigate to the editor page
+            window.location.href = 'editor.html';
+        }
+    </script>
+</body>
+</html>

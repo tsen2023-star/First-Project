@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+</head>
+<body>
+    <div class="editor-header">
+        <h2 id="lang-title">Loading Editor...</h2>
+        <button onclick="window.location.href='index.html'">Change Language</button>
+    </div>
+
+    <div class="main-content">
+        <div class="problem-statement">
+            <h3 id="display-lang">Code Playground</h3>
+            <p>Write any code you wish in the editor below and click <strong>Run & Evaluate</strong>.</p>
+        </div>
+
+        <div id="editor-container" style="height: 450px; width: 90%; max-width: 1100px; margin: 10px auto; border: 1px solid #444;"></div>
+        
+        <div class="button-group" style="margin: 20px auto; text-align: center;">
+            <button class="run-btn" onclick="submitCode()">Run & Evaluate</button>
+            <button class="download-btn" onclick="downloadCode()" style="background: #28a745; margin-left: 10px;">Download Code</button>
+        </div>
+        
+        <div id="output-console"></div>
+    </div>
+
+    <script>
+        // 1. Initialize Settings
+        const selectedLang = localStorage.getItem('selectedLanguage') || 'python';
+        document.getElementById('lang-title').innerText = "Coding in " + selectedLang.toUpperCase();
+        document.getElementById('display-lang').innerText = selectedLang.toUpperCase() + " Editor";
+
+        // 2. Load Monaco Editor
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            window.editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: getStarterCode(selectedLang),
+                language: getMonacoLanguage(selectedLang),
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 16
+            });
+        });
+
+        // Helper to set starter code based on language
+        function getStarterCode(lang) {
+            const starters = {
+                'python': '# Write your Python code here\nprint("Hello World")',
+                'c': '#include <stdio.h>\n\nint main() {\n    printf("Hello World");\n    return 0;\n}',
+                'java': 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello World");\n    }\n}',
+                'javascript': '// Write your JS code\nconsole.log("Hello World");',
+                'html': '<h1>My Web Page</h1>\n<p>Type HTML here</p>',
+                'css': 'body {\n    background-color: powderblue;\n}\nh1 {\n    color: blue;\n}'
+            };
+            return starters[lang] || "// Start coding...";
+        }
+
+        // Helper to map language to Monaco highlighter
+        function getMonacoLanguage(lang) {
+            if (lang === 'c') return 'cpp';
+            return lang;
+        }
+
+        // 3. Execution Logic
+        async function submitCode() {
+            const userCode = window.editor.getValue();
+            const display = document.getElementById('output-console');
+            
+            // Logic for HTML/CSS (Client-side rendering)
+            if (selectedLang === 'html' || selectedLang === 'css') {
+                display.innerHTML = "<em>Opening Preview Window...</em>";
+                let preview = window.open("", "Preview", "width=800,height=600");
+                preview.document.open();
+                preview.document.write(selectedLang === 'html' ? userCode : `<style>${userCode}</style><h1>CSS Applied!</h1><p>Check your styles below.</p>`);
+                preview.document.close();
+                return;
+            }
+
+            // Logic for Python, C, Java, JavaScript (Server-side execution)
+            display.innerText = "Running your code on the server...";
+            try {
+                const response = await fetch("http://127.0.0.1:8000/run", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        language: selectedLang, 
+                        code: userCode 
+                    })
+                });
+
+                const data = await response.json();
+                display.innerText = data.output;
+            } catch (error) {
+                display.innerText = "Error: Backend server (main.py) is not running.";
+                console.error("Connection error:", error);
+            }
+        }
+
+        // 4. Download Logic
+        function downloadCode() {
+            const code = window.editor.getValue();
+            
+            // Mapping languages to file extensions
+            const extensions = {
+                'python': 'py',
+                'c': 'c',
+                'java': 'java',
+                'javascript': 'js',
+                'html': 'html',
+                'css': 'css'
+            };
+            
+            const ext = extensions[selectedLang] || 'txt';
+            const filename = `my_code_${selectedLang}.${ext}`;
+
+            // Create a blob and trigger download
+            const blob = new Blob([code], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
