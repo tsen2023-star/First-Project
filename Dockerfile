@@ -10,5 +10,5 @@ WORKDIR /app
 COPY . .
 RUN pip install -r requirements.txt
 
-# Start the server
+# Start the server (Must be exactly like this)
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
