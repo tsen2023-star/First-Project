@@ -58,9 +58,9 @@ body {
 
 .language-card:hover {
     background: #2d2d30;
-    border-color: #e31161;
+    border-color: #1e0855;
     transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(16, 235, 8, 0.2);
+    box-shadow: 0 10px 30px rgb(255, 0, 0);
 }
 
 .language-card .lang-icon {
