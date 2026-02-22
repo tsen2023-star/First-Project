@@ -3,29 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coding Practice Platform</title>
+    <title>Online Compiler - Home</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to the Coding Playground</h1>
-        <p>Select a language to start practicing your skills:</p>
+    <div class="landing-container">
+        <div class="landing-header">
+            <div class="logo"><span>&lt;/&gt;</span> CodeCompiler</div>
+            <p class="tagline">Write and Run Python, C++, Java, C, HTML, and CSS</p>
+        </div>
 
-        <div class="language-options">
-            <button onclick="selectLanguage('python')">Python</button>
-            <button onclick="selectLanguage('java')">Java</button>
-            <button onclick="selectLanguage('javascript')">JavaScript</button>
-            <button onclick="selectLanguage('c')">C Language</button>
-            <button onclick="selectLanguage('html')">HTML</button>
-            <button onclick="selectLanguage('css')">CSS</button>
+        <div class="language-grid">
+            <div class="language-card" onclick="selectLanguage('python')">
+                <div class="lang-icon">🐍</div>
+                <h3>Python</h3>
+                <p>Simple and readable</p>
+            </div>
+            <div class="language-card" onclick="selectLanguage('cpp')">
+                <div class="lang-icon">⚙️</div>
+                <h3>C++</h3>
+                <p>Speed and performance</p>
+            </div>
+            <div class="language-card" onclick="selectLanguage('java')">
+                <div class="lang-icon">☕</div>
+                <h3>Java</h3>
+                <p>Enterprise OOP</p>
+            </div>
+            <div class="language-card" onclick="selectLanguage('c')">
+                <div class="lang-icon">⚡</div>
+                <h3>C</h3>
+                <p>Low-level power</p>
+            </div>
+            <div class="language-card" onclick="selectLanguage('html')">
+                <div class="lang-icon">🌐</div>
+                <h3>HTML</h3>
+                <p>Web structure</p>
+            </div>
+            <div class="language-card" onclick="selectLanguage('css')">
+                <div class="lang-icon">🎨</div>
+                <h3>CSS</h3>
+                <p>Web styling</p>
+            </div>
         </div>
     </div>
-
     <script>
         function selectLanguage(lang) {
-            // Save the selection so editor.html knows what to load
             localStorage.setItem('selectedLanguage', lang);
-            // Navigate to the editor page
             window.location.href = 'editor.html';
         }
     </script>
