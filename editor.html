@@ -188,8 +188,8 @@
             inputBuffer = '';
 
             if (ws) { ws.close(); }
-
-            ws = new WebSocket("ws://127.0.0.1:8000/ws/run");
+// Replace 'your-backend-app.onrender.com' with the actual URL provided by your hosting service
+ws = new WebSocket("wss://your-backend-app.onrender.com/ws/run");
 
             ws.onopen = () => {
                 ws.send(JSON.stringify({ language: currentLang, code: code }));
@@ -218,3 +218,4 @@
     </script>
 </body>
 </html>
+
